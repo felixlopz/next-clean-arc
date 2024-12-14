@@ -5,6 +5,7 @@ import { ICrashReporterService } from '@/src/application/services/crash-reporter
 
 // import { ITodosRepository } from '@/src/application/repositories/todos.repository.interface';
 import { IUsersRepository } from '@/src/application/repositories/users.repository.interface';
+import { ISessionRepository } from '@/src/application/repositories/session.repository.interface';
 
 // import { ICreateTodoUseCase } from '@/src/application/use-cases/todos/create-todo.use-case';
 // import { IDeleteTodoUseCase } from '@/src/application/use-cases/todos/delete-todo.use-case';
@@ -32,6 +33,7 @@ export const DI_SYMBOLS = {
   // Repositories
   ITodosRepository: Symbol.for('ITodosRepository'),
   IUsersRepository: Symbol.for('IUsersRepository'),
+  ISessionRepository: Symbol.for('ISessionRepository'),
 
   // Use Cases
   ICreateTodoUseCase: Symbol.for('ICreateTodoUseCase'),
@@ -62,6 +64,7 @@ export interface DI_RETURN_TYPES {
   // Repositories
   // ITodosRepository: ITodosRepository;
   IUsersRepository: IUsersRepository;
+  ISessionRespository: ISessionRepository;
 
   // Use Cases
   // ICreateTodoUseCase: ICreateTodoUseCase;

@@ -15,6 +15,7 @@ import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
 
 import { userSchema } from '@/src/entities/models/user';
+import { loginAction } from '@/app/(unauthorized)/actions';
 const formSchema = userSchema.pick({ email: true, password: true });
 
 export default function SignInForm() {
@@ -26,8 +27,10 @@ export default function SignInForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { email, password } = values;
+
+    const res = await loginAction(email, password);
   }
 
   return (

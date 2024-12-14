@@ -2,39 +2,48 @@ import { compare } from 'bcrypt-ts';
 import { createId } from '@paralleldrive/cuid2';
 
 import { SESSION_COOKIE } from '@/config';
-import { type IUsersRepository } from '@/src/application/repositories/users.repository.interface';
 import { IAuthenticationService } from '@/src/application/services/authentication.service.interface';
 import { UnauthenticatedError } from '@/src/entities/errors/auth';
 import { Cookie } from '@/src/entities/models/cookie';
-import { Session, sessionSchema } from '@/src/entities/models/session';
+import {
+  Session,
+  SessionFlags,
+  sessionSchema,
+} from '@/src/entities/models/session';
 import { User } from '@/src/entities/models/user';
-import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
+
+import { type IUsersRepository } from '@/src/application/repositories/users.repository.interface';
+import { type IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
+import { type ISessionRepository } from '@/src/application/repositories/session.repository.interface';
 
 export class AuthenticationService implements IAuthenticationService {
   constructor(
     private readonly _usersRepository: IUsersRepository,
-    private readonly _instrumentationService: IInstrumentationService
+    private readonly _instrumentationService: IInstrumentationService,
+    private readonly _sessionRepository: ISessionRepository
   ) {}
 
-  validatePasswords(
+  async validatePasswords(
     inputPassword: string,
     usersHashedPassword: string
   ): Promise<boolean> {
     return this._instrumentationService.startSpan(
       { name: 'verify password hash', op: 'function' },
-      () => compare(inputPassword, usersHashedPassword)
+      async () => {
+        return compare(inputPassword, usersHashedPassword);
+      }
     );
   }
 
   async validateSession(
-    sessionId: string
+    sessionToken: string
   ): Promise<{ user: User; session: Session }> {
     return await this._instrumentationService.startSpan(
       { name: 'AuthenticationService > validateSession' },
       async () => {
         const result = await this._instrumentationService.startSpan(
-          { name: 'lucia.validateSession', op: 'function' },
-          () => this._lucia.validateSession(sessionId)
+          { name: 'sessionRepository.validateSession', op: 'function' },
+          () => this._sessionRepository.validateSessionToken(sessionToken)
         );
 
         if (!result.user || !result.session) {
@@ -57,27 +66,51 @@ export class AuthenticationService implements IAuthenticationService {
   ): Promise<{ session: Session; cookie: Cookie }> {
     return await this._instrumentationService.startSpan(
       { name: 'AuthenticationService > createSession' },
+
       async () => {
-        return {};
+        const sessionFlags: SessionFlags = {
+          twoFactorVerified: false,
+        };
+        const sessionToken =
+          await this._sessionRepository.generateSessionToken();
+        const session = await this._sessionRepository.createSession(
+          sessionToken,
+          user.id,
+          sessionFlags
+        );
+
+        const cookie: Cookie = {
+          name: SESSION_COOKIE,
+          value: sessionToken,
+          attributes: {
+            httpOnly: true,
+            path: '/',
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            expires: session.expiresAt,
+          },
+        };
+
+        return { session, cookie };
       }
     );
   }
 
-  async invalidateSession(sessionId: string): Promise<{ blankCookie: Cookie }> {
-    await this._instrumentationService.startSpan(
-      { name: 'lucia.invalidateSession', op: 'function' },
-      () => {
-        return;
-      }
-    );
+  // async invalidateSession(sessionId: string): Promise<{ blankCookie: Cookie }> {
+  //   await this._instrumentationService.startSpan(
+  //     { name: 'lucia.invalidateSession', op: 'function' },
+  //     () => {
+  //       return;
+  //     }
+  //   );
 
-    const blankCookie = this._instrumentationService.startSpan(
-      { name: 'lucia.createBlankSessionCookie', op: 'function' },
-      () => {}
-    );
+  //   const blankCookie = this._instrumentationService.startSpan(
+  //     { name: 'lucia.createBlankSessionCookie', op: 'function' },
+  //     () => {}
+  //   );
 
-    return { blankCookie };
-  }
+  //   return { blankCookie };
+  // }
 
   generateUserId(): string {
     return this._instrumentationService.startSpan(

@@ -35,15 +35,13 @@ export async function loginAction(email: string, password: string) {
         };
       }
 
-      console.log('llego hasta aqui');
-
-      // (await cookies()).set(
-      //   sessionCookie.name,
-      //   sessionCookie.value,
-      //   sessionCookie.attributes
-      // );
-
-      // redirect('/');
+      const storeCookie = await cookies();
+      storeCookie.set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes
+      );
+      redirect('/');
     }
   );
 }

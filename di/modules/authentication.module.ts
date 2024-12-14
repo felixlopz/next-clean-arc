@@ -26,6 +26,7 @@ export function createAuthenticationModule() {
       .toClass(AuthenticationService, [
         DI_SYMBOLS.IUsersRepository,
         DI_SYMBOLS.IInstrumentationService,
+        DI_SYMBOLS.ISessionRepository,
       ]);
   }
 

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { User } from './user';
 
 export const sessionSchema = z.object({
   id: z.string(),
@@ -7,3 +8,9 @@ export const sessionSchema = z.object({
 });
 
 export type Session = z.infer<typeof sessionSchema>;
+export type SessionValidationResult =
+  | { session: Session; user: User }
+  | { session: null; user: null };
+export interface SessionFlags {
+  twoFactorVerified: boolean;
+}

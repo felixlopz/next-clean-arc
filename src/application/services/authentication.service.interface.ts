@@ -12,5 +12,5 @@ export interface IAuthenticationService {
     usersHashedPassword: string
   ): Promise<boolean>;
   createSession(user: User): Promise<{ session: Session; cookie: Cookie }>;
-  invalidateSession(sessionId: Session['id']): Promise<{ blankCookie: Cookie }>;
+  // invalidateSession(sessionId: Session['id']): Promise<{ blankCookie: Cookie }>;
 }

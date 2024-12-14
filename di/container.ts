@@ -8,6 +8,7 @@ import { createMonitoringModule } from '@/di/modules/monitoring.module';
 import { createAuthenticationModule } from '@/di/modules/authentication.module';
 import { createTransactionManagerModule } from '@/di/modules/database.module';
 import { createUsersModule } from '@/di/modules/users.module';
+import { createSessionsModule } from './modules/session.module';
 // import { createTodosModule } from '@/di/modules/todos.module';
 
 const ApplicationContainer = createContainer();
@@ -22,6 +23,7 @@ ApplicationContainer.load(
   createAuthenticationModule()
 );
 ApplicationContainer.load(Symbol('UsersModule'), createUsersModule());
+ApplicationContainer.load(Symbol('SessionModule'), createSessionsModule());
 // ApplicationContainer.load(Symbol('TodosModule'), createTodosModule());
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(

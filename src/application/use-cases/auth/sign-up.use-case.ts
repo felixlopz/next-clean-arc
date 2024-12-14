@@ -5,6 +5,7 @@ import { User } from '@/src/entities/models/user';
 import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 import type { IAuthenticationService } from '@/src/application/services/authentication.service.interface';
 import type { IUsersRepository } from '@/src/application/repositories/users.repository.interface';
+import { ISessionRepository } from '@/src/application/repositories/session.repository.interface';
 
 export type ISignUpUseCase = ReturnType<typeof signUpUseCase>;
 
