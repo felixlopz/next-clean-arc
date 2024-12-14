@@ -4,7 +4,7 @@ import {
   SessionValidationResult,
 } from '@/src/entities/models/session';
 
-export interface ISessionRepository {
+export interface ISessionsRepository {
   generateSessionToken(): Promise<string>;
   createSession(
     token: string,
@@ -12,6 +12,8 @@ export interface ISessionRepository {
     flags: SessionFlags
   ): Promise<Session>;
   validateSessionToken(token: string): Promise<SessionValidationResult>;
-  // getCurrentSession(): Promise<SessionValidationResult>;
-  // invalidateUserSession(userId: string): Promise<void>;
+  getCurrentSession(
+    sessionToken: string | null
+  ): Promise<SessionValidationResult>;
+  invalidateUserSession(userId: string): Promise<void>;
 }

@@ -4,7 +4,7 @@ import {
 } from '@oslojs/encoding';
 import { sha256 } from '@oslojs/crypto/sha2';
 
-import { ISessionRepository } from '@/src/application/repositories/session.repository.interface';
+import { ISessionsRepository } from '@/src/application/repositories/session.repository.interface';
 import {
   SessionFlags,
   Session,
@@ -13,13 +13,12 @@ import {
 import { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 import { ICrashReporterService } from '@/src/application/services/crash-reporter.service.interface';
 import { db } from '@/drizzle';
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { sessions, users } from '@/drizzle/schema';
 import { DatabaseOperationError } from '@/src/entities/errors/common';
-import { cookies } from 'next/headers';
 import { User } from '@/src/entities/models/user';
 
-export class SessionRepository implements ISessionRepository {
+export class SessionsRepository implements ISessionsRepository {
   constructor(
     private readonly instrumentationService: IInstrumentationService,
     private readonly crashReporterService: ICrashReporterService
@@ -151,17 +150,31 @@ export class SessionRepository implements ISessionRepository {
     );
   }
 
-  async getCurrentSession(): Promise<SessionValidationResult> {
+  async getCurrentSession(
+    sessionToken: string | null
+  ): Promise<SessionValidationResult> {
     return await this.instrumentationService.startSpan(
       { name: 'SessionRepository > getCurrentSession' },
       async () => {
-        const storedCookie = await cookies();
-        const sessionToken = storedCookie.get('session')?.value ?? null;
-        if (sessionToken === null) {
+        if (sessionToken == null) {
           return { session: null, user: null };
         }
         const result = await this.validateSessionToken(sessionToken);
         return result;
+      }
+    );
+  }
+
+  async invalidateUserSession(userId: string): Promise<void> {
+    return await this.instrumentationService.startSpan(
+      { name: 'SessionRepository > invalidateSession' },
+      async () => {
+        try {
+          await db.delete(sessions).where(eq(sessions.userId, userId));
+        } catch (error) {
+          this.crashReporterService.report(error);
+          throw error; // TODO: convert to Entities error
+        }
       }
     );
   }
