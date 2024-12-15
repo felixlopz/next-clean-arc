@@ -9,7 +9,7 @@ export const sessionSchema = z.object({
 
 export type Session = z.infer<typeof sessionSchema>;
 export type SessionValidationResult =
-  | { session: Session; user: User }
+  | { session: Session; user: Omit<User, 'password'> }
   | { session: null; user: null };
 export interface SessionFlags {
   twoFactorVerified: boolean;

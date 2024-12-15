@@ -10,6 +10,7 @@ export default function LogoutButton() {
       onClick={() => {
         logoutAction();
       }}
+      className="self-center"
     >
       Log out
     </Button>

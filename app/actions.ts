@@ -7,26 +7,11 @@ import { cookies } from 'next/headers';
 
 export async function logoutAction() {
   const storedCookie = await cookies();
-
-  const sessionsRepository = getInjection('ISessionsRepository');
-  const { session, user } = await sessionsRepository.getCurrentSession(
+  const authenticationService = getInjection('IAuthenticationService');
+  const { blankCookie } = await authenticationService.invalidateSession(
     storedCookie.get(SESSION_COOKIE)?.value ?? null
   );
 
-  if (session === null) {
-    return {
-      message: 'Not authenticated',
-    };
-  }
-
-  await sessionsRepository.invalidateUserSession(user.id);
-  storedCookie.set(SESSION_COOKIE, '', {
-    httpOnly: true,
-    path: '/',
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 0,
-  });
-
+  storedCookie.set(blankCookie.name, blankCookie.value, blankCookie.attributes);
   return redirect('/sign-in');
 }

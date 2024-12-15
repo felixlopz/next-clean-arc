@@ -14,13 +14,13 @@ import { User } from '@/src/entities/models/user';
 
 import { type IUsersRepository } from '@/src/application/repositories/users.repository.interface';
 import { type IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
-import { type ISessionRepository } from '@/src/application/repositories/session.repository.interface';
+import { type ISessionsRepository } from '@/src/application/repositories/session.repository.interface';
 
 export class AuthenticationService implements IAuthenticationService {
   constructor(
     private readonly _usersRepository: IUsersRepository,
     private readonly _instrumentationService: IInstrumentationService,
-    private readonly _sessionRepository: ISessionRepository
+    private readonly _sessionRepository: ISessionsRepository
   ) {}
 
   async validatePasswords(
@@ -36,8 +36,12 @@ export class AuthenticationService implements IAuthenticationService {
   }
 
   async validateSession(
-    sessionToken: string
+    sessionToken: string | null
   ): Promise<{ user: User; session: Session }> {
+    if (sessionToken == null) {
+      throw new UnauthenticatedError('Unauthenticated');
+    }
+
     return await this._instrumentationService.startSpan(
       { name: 'AuthenticationService > validateSession' },
       async () => {
@@ -96,21 +100,36 @@ export class AuthenticationService implements IAuthenticationService {
     );
   }
 
-  // async invalidateSession(sessionId: string): Promise<{ blankCookie: Cookie }> {
-  //   await this._instrumentationService.startSpan(
-  //     { name: 'lucia.invalidateSession', op: 'function' },
-  //     () => {
-  //       return;
-  //     }
-  //   );
+  async invalidateSession(
+    sessionToken: string | null
+  ): Promise<{ blankCookie: Cookie }> {
+    const { session, user } = await this._instrumentationService.startSpan(
+      { name: 'lucia.invalidateSession', op: 'function' },
+      async () => {
+        return await this._sessionRepository.getCurrentSession(sessionToken);
+      }
+    );
 
-  //   const blankCookie = this._instrumentationService.startSpan(
-  //     { name: 'lucia.createBlankSessionCookie', op: 'function' },
-  //     () => {}
-  //   );
+    if (session == null) {
+      throw new UnauthenticatedError('Not authenticated');
+    }
 
-  //   return { blankCookie };
-  // }
+    await this._sessionRepository.invalidateUserSession(user.id);
+
+    const blankCookie: Cookie = {
+      name: SESSION_COOKIE,
+      value: '',
+      attributes: {
+        httpOnly: true,
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 0,
+      },
+    };
+
+    return { blankCookie };
+  }
 
   generateUserId(): string {
     return this._instrumentationService.startSpan(
