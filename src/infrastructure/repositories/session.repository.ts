@@ -160,7 +160,7 @@ export class SessionsRepository implements ISessionsRepository {
   }
 
   async getCurrentSession(
-    sessionToken: string | null
+    sessionToken: string | undefined
   ): Promise<SessionValidationResult> {
     return await this.instrumentationService.startSpan(
       { name: 'SessionRepository > getCurrentSession' },
