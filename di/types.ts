@@ -8,9 +8,11 @@ import { ISessionsRepository } from '@/src/application/repositories/session.repo
 
 import { ISignInUseCase } from '@/src/application/use-cases/auth/sign-in.use-case';
 import { ISignUpUseCase } from '@/src/application/use-cases/auth/sign-up.use-case';
+import { ISignOutUseCase } from '@/src/application/use-cases/auth/sign-out.use-case';
 
 import { ISignInController } from '@/src/interface-adapters/controllers/auth/sign-in.controller';
 import { ISignUpController } from '@/src/interface-adapters/controllers/auth/sign-up.controller';
+import { ISignOutController } from '@/src/interface-adapters/controllers/auth/sign-out.controller';
 
 export const DI_SYMBOLS = {
   // Services
@@ -26,10 +28,12 @@ export const DI_SYMBOLS = {
   // Use Cases
   ISignInUseCase: Symbol.for('ISignInUseCase'),
   ISignUpUseCase: Symbol.for('ISignUpUseCase'),
+  ISignOutUseCase: Symbol.for('ISignOutUseCase'),
 
   // Controllers
   ISignInController: Symbol.for('ISignInController'),
   ISignUpController: Symbol.for('ISignUpController'),
+  ISignOutController: Symbol.for('ISignOutController'),
 };
 
 export interface DI_RETURN_TYPES {
@@ -43,10 +47,13 @@ export interface DI_RETURN_TYPES {
   IUsersRepository: IUsersRepository;
   ISessionsRepository: ISessionsRepository;
 
+  // Use Cases
   ISignInUseCase: ISignInUseCase;
   ISignUpUseCase: ISignUpUseCase;
+  ISignOutUseCase: ISignOutUseCase;
 
   // Controllers
   ISignInController: ISignInController;
   ISignUpController: ISignUpController;
+  ISignOutController: ISignOutController;
 }

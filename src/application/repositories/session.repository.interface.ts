@@ -5,15 +5,16 @@ import {
 } from '@/src/entities/models/session';
 
 export interface ISessionsRepository {
-  generateSessionToken(): Promise<string>;
   createSession(
     token: string,
     userId: string,
     flags: SessionFlags
   ): Promise<Session>;
   validateSessionToken(token: string): Promise<SessionValidationResult>;
-  getCurrentSession(
-    sessionToken: string | null
-  ): Promise<SessionValidationResult>;
   invalidateUserSession(userId: string): Promise<void>;
+  invalidateSession(sessionId: string): Promise<void>;
+  generateSessionToken(): Promise<string>;
+  getCurrentSession(
+    sessionToken: string | undefined
+  ): Promise<SessionValidationResult>;
 }

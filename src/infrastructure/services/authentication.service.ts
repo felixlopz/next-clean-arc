@@ -77,6 +77,7 @@ export class AuthenticationService implements IAuthenticationService {
         };
         const sessionToken =
           await this._sessionRepository.generateSessionToken();
+
         const session = await this._sessionRepository.createSession(
           sessionToken,
           user.id,
@@ -100,21 +101,8 @@ export class AuthenticationService implements IAuthenticationService {
     );
   }
 
-  async invalidateSession(
-    sessionToken: string | null
-  ): Promise<{ blankCookie: Cookie }> {
-    const { session, user } = await this._instrumentationService.startSpan(
-      { name: 'lucia.invalidateSession', op: 'function' },
-      async () => {
-        return await this._sessionRepository.getCurrentSession(sessionToken);
-      }
-    );
-
-    if (session == null) {
-      throw new UnauthenticatedError('Not authenticated');
-    }
-
-    await this._sessionRepository.invalidateUserSession(user.id);
+  async invalidateSession(sessionId: string): Promise<{ blankCookie: Cookie }> {
+    await this._sessionRepository.invalidateSession(sessionId);
 
     const blankCookie: Cookie = {
       name: SESSION_COOKIE,

@@ -3,7 +3,10 @@ import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 
 import { getInjection } from '@/di/container';
-import { AuthenticationError } from '@/src/entities/errors/auth';
+import {
+  AuthenticationError,
+  UnauthenticatedError,
+} from '@/src/entities/errors/auth';
 import { InputParseError } from '@/src/entities/errors/common';
 import { Cookie } from '@/src/entities/models/cookie';
 import { SESSION_COOKIE } from '@/config';
@@ -97,13 +100,38 @@ export async function signUp(name: string, email: string, password: string) {
   );
 }
 
-export async function logoutAction() {
-  const storedCookie = await cookies();
-  const authenticationService = getInjection('IAuthenticationService');
-  const { blankCookie } = await authenticationService.invalidateSession(
-    storedCookie.get(SESSION_COOKIE)?.value ?? null
-  );
+export async function signOut() {
+  const instrumentationService = getInjection('IInstrumentationService');
+  return await instrumentationService.instrumentServerAction(
+    'signOut',
+    { recordResponse: true },
+    async () => {
+      const storedCookie = await cookies();
+      const sessionToken = storedCookie.get(SESSION_COOKIE)?.value;
 
-  storedCookie.set(blankCookie.name, blankCookie.value, blankCookie.attributes);
-  return redirect('/sign-in');
+      let blankCookie: Cookie;
+      try {
+        const signOutController = getInjection('ISignOutController');
+        blankCookie = await signOutController(sessionToken);
+      } catch (err) {
+        if (
+          err instanceof UnauthenticatedError ||
+          err instanceof InputParseError
+        ) {
+          redirect('/sign-in');
+        }
+        const crashReporterService = getInjection('ICrashReporterService');
+        crashReporterService.report(err);
+        throw err;
+      }
+
+      storedCookie.set(
+        blankCookie.name,
+        blankCookie.value,
+        blankCookie.attributes
+      );
+
+      redirect('/sign-in');
+    }
+  );
 }

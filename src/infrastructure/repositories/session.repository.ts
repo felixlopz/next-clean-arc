@@ -15,7 +15,10 @@ import { ICrashReporterService } from '@/src/application/services/crash-reporter
 import { db } from '@/drizzle';
 import { eq } from 'drizzle-orm';
 import { sessions, users } from '@/drizzle/schema';
-import { DatabaseOperationError } from '@/src/entities/errors/common';
+import {
+  DatabaseOperationError,
+  NotFoundError,
+} from '@/src/entities/errors/common';
 import { User } from '@/src/entities/models/user';
 
 export class SessionsRepository implements ISessionsRepository {
@@ -47,6 +50,12 @@ export class SessionsRepository implements ISessionsRepository {
             },
             () => query.execute()
           );
+
+          if (data == null) {
+            throw new NotFoundError(
+              `Session with session id:${sessionId} not found`
+            );
+          }
 
           const session: Session = {
             ...data.sessions,
@@ -167,10 +176,24 @@ export class SessionsRepository implements ISessionsRepository {
 
   async invalidateUserSession(userId: string): Promise<void> {
     return await this.instrumentationService.startSpan(
-      { name: 'SessionRepository > invalidateSession' },
+      { name: 'SessionRepository > invalidateUserSession' },
       async () => {
         try {
           await db.delete(sessions).where(eq(sessions.userId, userId));
+        } catch (error) {
+          this.crashReporterService.report(error);
+          throw error; // TODO: convert to Entities error
+        }
+      }
+    );
+  }
+
+  async invalidateSession(sessionId: string): Promise<void> {
+    return await this.instrumentationService.startSpan(
+      { name: 'SessionRepository > invalidateSession' },
+      async () => {
+        try {
+          await db.delete(sessions).where(eq(sessions.id, sessionId));
         } catch (error) {
           this.crashReporterService.report(error);
           throw error; // TODO: convert to Entities error

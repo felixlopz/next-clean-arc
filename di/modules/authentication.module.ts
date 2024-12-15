@@ -12,6 +12,8 @@ import { signUpController } from '@/src/interface-adapters/controllers/auth/sign
 // import { signOutController } from '@/src/interface-adapters/controllers/auth/sign-out.controller';
 
 import { DI_SYMBOLS } from '@/di/types';
+import { signOutController } from '@/src/interface-adapters/controllers/auth/sign-out.controller';
+import { signOutUseCase } from '@/src/application/use-cases/auth/sign-out.use-case';
 
 export function createAuthenticationModule() {
   const authenticationModule = createModule();
@@ -47,12 +49,12 @@ export function createAuthenticationModule() {
       DI_SYMBOLS.IUsersRepository,
     ]);
 
-  // authenticationModule
-  //   .bind(DI_SYMBOLS.ISignOutUseCase)
-  //   .toHigherOrderFunction(signOutUseCase, [
-  //     DI_SYMBOLS.IInstrumentationService,
-  //     DI_SYMBOLS.IAuthenticationService,
-  //   ]);
+  authenticationModule
+    .bind(DI_SYMBOLS.ISignOutUseCase)
+    .toHigherOrderFunction(signOutUseCase, [
+      DI_SYMBOLS.IInstrumentationService,
+      DI_SYMBOLS.IAuthenticationService,
+    ]);
 
   // Controllers
   authenticationModule
@@ -69,13 +71,13 @@ export function createAuthenticationModule() {
       DI_SYMBOLS.ISignUpUseCase,
     ]);
 
-  // authenticationModule
-  //   .bind(DI_SYMBOLS.ISignOutController)
-  //   .toHigherOrderFunction(signOutController, [
-  //     DI_SYMBOLS.IInstrumentationService,
-  //     DI_SYMBOLS.IAuthenticationService,
-  //     DI_SYMBOLS.ISignOutUseCase,
-  //   ]);
+  authenticationModule
+    .bind(DI_SYMBOLS.ISignOutController)
+    .toHigherOrderFunction(signOutController, [
+      DI_SYMBOLS.IInstrumentationService,
+      DI_SYMBOLS.IAuthenticationService,
+      DI_SYMBOLS.ISignOutUseCase,
+    ]);
 
   return authenticationModule;
 }

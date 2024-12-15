@@ -1,6 +1,6 @@
 'use client';
 
-import { logoutAction } from '@/app/features/auth/actions';
+import { signOut } from '@/app/features/auth/actions';
 import { Button } from '@/app/components/ui/button';
 
 export default function LogoutButton() {
@@ -8,7 +8,7 @@ export default function LogoutButton() {
     <Button
       variant="secondary"
       onClick={() => {
-        logoutAction();
+        signOut();
       }}
       className="self-center"
     >
