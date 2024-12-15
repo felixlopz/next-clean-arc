@@ -6,6 +6,7 @@ import { getInjection } from '@/di/container';
 import { AuthenticationError } from '@/src/entities/errors/auth';
 import { InputParseError } from '@/src/entities/errors/common';
 import { Cookie } from '@/src/entities/models/cookie';
+import { SESSION_COOKIE } from '@/config';
 
 export async function loginAction(email: string, password: string) {
   const instrumentationService = getInjection('IInstrumentationService');
@@ -94,4 +95,15 @@ export async function signUp(name: string, email: string, password: string) {
       redirect('/');
     }
   );
+}
+
+export async function logoutAction() {
+  const storedCookie = await cookies();
+  const authenticationService = getInjection('IAuthenticationService');
+  const { blankCookie } = await authenticationService.invalidateSession(
+    storedCookie.get(SESSION_COOKIE)?.value ?? null
+  );
+
+  storedCookie.set(blankCookie.name, blankCookie.value, blankCookie.attributes);
+  return redirect('/sign-in');
 }

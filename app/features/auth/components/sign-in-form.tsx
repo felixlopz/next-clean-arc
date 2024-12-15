@@ -15,7 +15,8 @@ import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
 
 import { userSchema } from '@/src/entities/models/user';
-import { loginAction } from '@/app/(unauthorized)/actions';
+import { loginAction } from '@/app/features/auth/actions';
+import Link from 'next/link';
 const formSchema = userSchema.pick({ email: true, password: true });
 
 export default function SignInForm() {
@@ -39,7 +40,7 @@ export default function SignInForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-12 rounded-md border border-input p-8"
       >
-        <h3 className="text-3xl font-bold mb-4">Sign In</h3>
+        <h3 className="text-2xl  mb-4">Sign In</h3>
         <div className="space-y-4 flex flex-col">
           <FormField
             control={form.control}
@@ -71,6 +72,12 @@ export default function SignInForm() {
               </FormItem>
             )}
           />
+          <span>
+            Not Registred?{' '}
+            <Link href="/sign-up" className="underline">
+              Sign Up
+            </Link>
+          </span>
           <Button
             variant="secondary"
             type="submit"

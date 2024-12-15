@@ -11,10 +11,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import { signUp } from '@/app/(unauthorized)/actions';
+} from '@/app/components/ui/form';
+import { Input } from '@/app/components/ui/input';
+import { Button } from '@/app/components/ui/button';
+import { signUp } from '@/app/features/auth/actions';
+import Link from 'next/link';
 
 const formSchema = createUserSchema.omit({ id: true });
 
@@ -84,6 +85,12 @@ export default function SignUpForm() {
               </FormItem>
             )}
           />
+          <span>
+            Already Registred?{' '}
+            <Link href="/sign-in" className="underline">
+              Sign In
+            </Link>
+          </span>
           <Button
             variant="secondary"
             type="submit"

@@ -1,5 +1,5 @@
 import { getInjection } from '@/di/container';
-import LogoutButton from './components/auth/logout-button';
+import LogoutButton from '@/app/features/auth/components/logout-button';
 import { cookies } from 'next/headers';
 import { SESSION_COOKIE } from '@/config';
 
