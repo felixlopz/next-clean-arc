@@ -13,27 +13,29 @@ export class MockUsersRepository implements IUsersRepository {
         id: '1',
         email: 'one@mail.com',
         password: hashSync('password-one', PASSWORD_SALT_ROUNDS),
-        name: "one",
-        role: "user",
-        createdAt: new Date()
+        name: 'one',
+        role: 'user',
+        emailVerified: true,
+        createdAt: new Date(),
       },
       {
         id: '2',
         email: 'two@mail.com',
         password: hashSync('password-two', PASSWORD_SALT_ROUNDS),
-        name: "two",
-        role: "user",
-        createdAt: new Date()
+        name: 'two',
+        role: 'user',
+        emailVerified: true,
+        createdAt: new Date(),
       },
       {
         id: '3',
         email: 'three@mail.com',
         password: hashSync('password-three', PASSWORD_SALT_ROUNDS),
-        name: "three",
-        role: "user",
-        createdAt: new Date()
+        name: 'three',
+        role: 'user',
+        emailVerified: true,
+        createdAt: new Date(),
       },
-     
     ];
   }
 
@@ -41,8 +43,8 @@ export class MockUsersRepository implements IUsersRepository {
     const user = this._users.find((u) => u.id === id);
     return user;
   }
-  async getUserByEmail(username: string): Promise<User | undefined> {
-    const user = this._users.find((u) => u.email === username);
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const user = this._users.find((u) => u.email === email);
     return user;
   }
   async createUser(input: CreateUser): Promise<User> {
@@ -50,11 +52,14 @@ export class MockUsersRepository implements IUsersRepository {
       id: this._users.length.toString(),
       email: input.email,
       password: input.password,
-      role: "user",
+      role: 'user',
       createdAt: new Date(),
-      name: "now"
+      name: 'now',
+      emailVerified: false,
     };
     this._users.push(newUser);
     return newUser;
   }
+
+  async setUserEmailAsVerified(userId: User['id']): Promise<void> {}
 }

@@ -11,7 +11,7 @@ export class MockSessionsRepository implements ISessionsRepository {
     userId: string,
     flags: SessionFlags
   ): Promise<Session> {
-    return { expiresAt: new Date(), id: '', userId: '1' };
+    return { expiresAt: new Date(), id: 'random_session_id', userId: '1' };
   }
 
   async generateSessionToken(): Promise<string> {
