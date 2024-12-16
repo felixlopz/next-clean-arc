@@ -54,6 +54,31 @@ export async function verifyEmailAction(
   );
 }
 
-export async function resendEmailVerificationCodeAction(): Promise<ActionResult> {
-  return { message: '' };
+export async function resendEmailVerificationCodeAction(
+  _prev: ActionResult
+): Promise<ActionResult> {
+  const instrumentationService = getInjection('IInstrumentationService');
+  return await instrumentationService.instrumentServerAction(
+    'resendVerifyEmail',
+    { recordResponse: true },
+    async () => {
+      try {
+        const storedCookie = await cookies();
+        const sessionId = storedCookie.get(SESSION_COOKIE)?.value;
+        const verifyEmailController = getInjection(
+          'IResendVerifyEmaiController'
+        );
+
+        await verifyEmailController(sessionId);
+        return { message: 'new code sent to your email' };
+      } catch (err) {
+        if (err instanceof UnauthenticatedError) {
+          return { message: err.message };
+        }
+        const crashReporterService = getInjection('ICrashReporterService');
+        crashReporterService.report(err);
+        throw err;
+      }
+    }
+  );
 }

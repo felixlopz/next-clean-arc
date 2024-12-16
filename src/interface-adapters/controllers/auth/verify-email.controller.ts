@@ -2,15 +2,9 @@ import { z } from 'zod';
 
 import { InputParseError } from '@/src/entities/errors/common';
 import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
-import { User } from '@/src/entities/models/user';
 import { IVerifyEmailUseCase } from '@/src/application/use-cases/auth/verify-user-email.use-case';
-import { ISessionsRepository } from '@/src/application/repositories/session.repository.interface';
 import { UnauthenticatedError } from '@/src/entities/errors/auth';
 import { IAuthenticationService } from '@/src/application/services/authentication.service.interface';
-import {
-  VerificationCodeExpired,
-  VerificationCodeInvalid,
-} from '@/src/entities/errors/verify-email-request';
 import { ISetEmailAsVerifiedUseCase } from '@/src/application/use-cases/user/set-email-as-verified.useCase';
 
 const inputSchema = z.object({
