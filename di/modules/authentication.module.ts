@@ -29,6 +29,8 @@ export function createAuthenticationModule() {
         DI_SYMBOLS.IUsersRepository,
         DI_SYMBOLS.IInstrumentationService,
         DI_SYMBOLS.ISessionsRepository,
+        DI_SYMBOLS.IVerifyEmailRequestRepository,
+        DI_SYMBOLS.IEmailService,
       ]);
   }
 
@@ -76,8 +78,7 @@ export function createAuthenticationModule() {
     .toHigherOrderFunction(signUpController, [
       DI_SYMBOLS.IInstrumentationService,
       DI_SYMBOLS.ISignUpUseCase,
-      DI_SYMBOLS.IVerifyEmailRequestRepository,
-      DI_SYMBOLS.IEmailService,
+      DI_SYMBOLS.IAuthenticationService,
     ]);
 
   authenticationModule

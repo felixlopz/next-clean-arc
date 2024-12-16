@@ -5,10 +5,11 @@ import { IInstrumentationService } from '@/src/application/services/instrumentat
 import { ISignUpUseCase } from '@/src/application/use-cases/auth/sign-up.use-case';
 import { IVerifyEmailRequestRepository } from '@/src/application/repositories/verify-email-request.repository.interface';
 import { IEmailService } from '@/src/application/services/email.service.interface';
+import { IAuthenticationService } from '@/src/application/services/authentication.service.interface';
 
 const inputSchema = z.object({
   name: z.string().min(3).max(31),
-  email: z.string().min(3).max(31),
+  email: z.string().min(3).max(31).email(),
   password: z.string().min(6).max(31),
   // confirm_password: z.string().min(6).max(31),
 });
@@ -33,8 +34,7 @@ export const signUpController =
   (
     instrumentationService: IInstrumentationService,
     signUpUseCase: ISignUpUseCase,
-    verifyEmailRequestRepository: IVerifyEmailRequestRepository,
-    emailService: IEmailService
+    authenticationService: IAuthenticationService
   ) =>
   async (
     input: Partial<z.infer<typeof inputSchema>>
@@ -50,19 +50,9 @@ export const signUpController =
 
         const { cookie, session, user } = await signUpUseCase(data);
 
-        await instrumentationService.startSpan(
-          {
-            name: 'SignUp Controller SideEffect > createEmailVerificationRequest',
-          },
-          async () => {
-            const { code } =
-              await verifyEmailRequestRepository.createEmailVerificationRequest(
-                user.id,
-                data.email
-              );
-
-            await emailService.sendVerificationEmail(data.email, code);
-          }
+        await authenticationService.createAndSendVerificationEmailRequest(
+          user.id,
+          data.email
         );
 
         return { cookie, session, user };

@@ -5,22 +5,22 @@ import { SESSION_COOKIE } from '@/config';
 import { IAuthenticationService } from '@/src/application/services/authentication.service.interface';
 import { UnauthenticatedError } from '@/src/entities/errors/auth';
 import { Cookie } from '@/src/entities/models/cookie';
-import {
-  Session,
-  SessionFlags,
-  sessionSchema,
-} from '@/src/entities/models/session';
+import { Session, SessionFlags } from '@/src/entities/models/session';
 import { User } from '@/src/entities/models/user';
 
-import { type IUsersRepository } from '@/src/application/repositories/users.repository.interface';
-import { type IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
-import { type ISessionsRepository } from '@/src/application/repositories/session.repository.interface';
+import type { IUsersRepository } from '@/src/application/repositories/users.repository.interface';
+import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
+import type { ISessionsRepository } from '@/src/application/repositories/session.repository.interface';
+import type { IVerifyEmailRequestRepository } from '@/src/application/repositories/verify-email-request.repository.interface';
+import type { IEmailService } from '@/src/application/services/email.service.interface';
 
 export class AuthenticationService implements IAuthenticationService {
   constructor(
     private readonly _usersRepository: IUsersRepository,
     private readonly _instrumentationService: IInstrumentationService,
-    private readonly _sessionRepository: ISessionsRepository
+    private readonly _sessionRepository: ISessionsRepository,
+    private readonly _verifyEmailRequestRepository: IVerifyEmailRequestRepository,
+    private readonly _emailService: IEmailService
   ) {}
 
   async validatePasswords(
@@ -123,6 +123,24 @@ export class AuthenticationService implements IAuthenticationService {
     return this._instrumentationService.startSpan(
       { name: 'AuthenticationService > generateUserId', op: 'function' },
       () => createId()
+    );
+  }
+
+  async createAndSendVerificationEmailRequest(
+    userId: User['id'],
+    email: string
+  ): Promise<void> {
+    return await this._instrumentationService.startSpan(
+      { name: 'AuthenticationService > createAndSendVerificationEmailRequest' },
+      async () => {
+        const { code } =
+          await this._verifyEmailRequestRepository.createEmailVerificationRequest(
+            userId,
+            email
+          );
+
+        await this._emailService.sendVerificationEmail(email, code);
+      }
     );
   }
 }

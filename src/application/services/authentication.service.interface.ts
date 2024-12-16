@@ -1,4 +1,5 @@
 import { Cookie } from '@/src/entities/models/cookie';
+import { EmailVerificationRequest } from '@/src/entities/models/email-verification-request';
 import { Session } from '@/src/entities/models/session';
 import { User } from '@/src/entities/models/user';
 
@@ -13,4 +14,8 @@ export interface IAuthenticationService {
   ): Promise<boolean>;
   createSession(user: User): Promise<{ session: Session; cookie: Cookie }>;
   invalidateSession(sessionId: Session['id']): Promise<{ blankCookie: Cookie }>;
+  createAndSendVerificationEmailRequest(
+    userId: User['id'],
+    email: string
+  ): Promise<void>;
 }
