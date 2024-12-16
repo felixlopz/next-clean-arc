@@ -12,6 +12,8 @@ import { signUpController } from '@/src/interface-adapters/controllers/auth/sign
 import { signOutController } from '@/src/interface-adapters/controllers/auth/sign-out.controller';
 
 import { DI_SYMBOLS } from '@/di/types';
+import { verifyUserEmailController } from '@/src/interface-adapters/controllers/auth/verify-email.controller';
+import { verifyEmailUseCase } from '@/src/application/use-cases/auth/verify-user-email.use-case';
 
 export function createAuthenticationModule() {
   const authenticationModule = createModule();
@@ -54,6 +56,13 @@ export function createAuthenticationModule() {
       DI_SYMBOLS.IAuthenticationService,
     ]);
 
+  authenticationModule
+    .bind(DI_SYMBOLS.IVerifyEmailUseCase)
+    .toHigherOrderFunction(verifyEmailUseCase, [
+      DI_SYMBOLS.IInstrumentationService,
+      DI_SYMBOLS.IVerifyEmailRequestRepository,
+    ]);
+
   // Controllers
   authenticationModule
     .bind(DI_SYMBOLS.ISignInController)
@@ -77,6 +86,15 @@ export function createAuthenticationModule() {
       DI_SYMBOLS.IInstrumentationService,
       DI_SYMBOLS.IAuthenticationService,
       DI_SYMBOLS.ISignOutUseCase,
+    ]);
+
+  authenticationModule
+    .bind(DI_SYMBOLS.IVerifyEmailController)
+    .toHigherOrderFunction(verifyUserEmailController, [
+      DI_SYMBOLS.IInstrumentationService,
+      DI_SYMBOLS.IAuthenticationService,
+      DI_SYMBOLS.IVerifyEmailUseCase,
+      DI_SYMBOLS.ISetEmailAsVerifiedUseCase,
     ]);
 
   return authenticationModule;

@@ -4,8 +4,8 @@ import { MockUsersRepository } from '@/src/infrastructure/repositories/user.resp
 import { UsersRepository } from '@/src/infrastructure/repositories/user.repository';
 
 import { DI_SYMBOLS } from '@/di/types';
-import { verifyUserEmailController } from '@/src/interface-adapters/controllers/user/verify-email.controller';
-import { verifyEmailUseCase } from '@/src/application/use-cases/user/verify-user-email.use-case';
+import { verifyUserEmailController } from '@/src/interface-adapters/controllers/auth/verify-email.controller';
+import { verifyEmailUseCase } from '@/src/application/use-cases/auth/verify-user-email.use-case';
 import { setEmailAsVerifiedUseCase } from '@/src/application/use-cases/user/set-email-as-verified.useCase';
 
 export function createUsersModule() {

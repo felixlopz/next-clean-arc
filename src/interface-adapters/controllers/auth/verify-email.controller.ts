@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { InputParseError } from '@/src/entities/errors/common';
 import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 import { User } from '@/src/entities/models/user';
-import { IVerifyEmailUseCase } from '@/src/application/use-cases/user/verify-user-email.use-case';
+import { IVerifyEmailUseCase } from '@/src/application/use-cases/auth/verify-user-email.use-case';
 import { ISessionsRepository } from '@/src/application/repositories/session.repository.interface';
 import { UnauthenticatedError } from '@/src/entities/errors/auth';
 import { IAuthenticationService } from '@/src/application/services/authentication.service.interface';

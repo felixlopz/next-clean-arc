@@ -1,4 +1,7 @@
 import { db } from '@/drizzle';
+import { eq } from 'drizzle-orm';
+import { createId } from '@paralleldrive/cuid2';
+
 import { emailVerificationRequests } from '@/drizzle/schema';
 import { IVerifyEmailRequestRepository } from '@/src/application/repositories/verify-email-request.repository.interface';
 import { ICrashReporterService } from '@/src/application/services/crash-reporter.service.interface';
@@ -7,8 +10,6 @@ import { DatabaseOperationError } from '@/src/entities/errors/common';
 import { EmailVerificationRequest } from '@/src/entities/models/email-verification-request';
 import { User } from '@/src/entities/models/user';
 import { generateRandomOTP } from '@/src/utils';
-import { createId } from '@paralleldrive/cuid2';
-import { eq } from 'drizzle-orm';
 
 export class VerifyEmailRequestRepository
   implements IVerifyEmailRequestRepository

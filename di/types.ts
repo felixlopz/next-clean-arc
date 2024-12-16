@@ -11,13 +11,13 @@ import { IVerifyEmailRequestRepository } from '@/src/application/repositories/ve
 import { ISignInUseCase } from '@/src/application/use-cases/auth/sign-in.use-case';
 import { ISignUpUseCase } from '@/src/application/use-cases/auth/sign-up.use-case';
 import { ISignOutUseCase } from '@/src/application/use-cases/auth/sign-out.use-case';
+import { IVerifyEmailUseCase } from '@/src/application/use-cases/auth/verify-user-email.use-case';
 import { ISetEmailAsVerifiedUseCase } from '@/src/application/use-cases/user/set-email-as-verified.useCase';
-import { IVerifyEmailUseCase } from '@/src/application/use-cases/user/verify-user-email.use-case';
 
 import { ISignInController } from '@/src/interface-adapters/controllers/auth/sign-in.controller';
 import { ISignUpController } from '@/src/interface-adapters/controllers/auth/sign-up.controller';
 import { ISignOutController } from '@/src/interface-adapters/controllers/auth/sign-out.controller';
-import { IVerifyEmailController } from '@/src/interface-adapters/controllers/user/verify-email.controller';
+import { IVerifyEmailController } from '@/src/interface-adapters/controllers/auth/verify-email.controller';
 
 export const DI_SYMBOLS = {
   // Services
