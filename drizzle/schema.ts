@@ -16,6 +16,7 @@ export const users = pgTable('users', {
   email: varchar('email', { length: 255 }).notNull().unique(),
   password: varchar('password', { length: 255 }).notNull(),
   role: userRole().default('user').notNull(),
+  emailVerified: integer().notNull().default(0),
   createdAt: timestamp('created_at').notNull().defaultNow(), // Default timestamp
 });
 
@@ -25,9 +26,19 @@ export const userRoleSchema = createSelectSchema(userRole);
 export const selectUserSchema = createSelectSchema(users);
 
 export const sessions = pgTable('sessions', {
-  id: text('id').primaryKey(),
+  id: text('id').primaryKey().notNull(),
   userId: text('user_id')
     .notNull()
     .references(() => users.id),
+  expiresAt: integer('expires_at').notNull(),
+});
+
+export const emailVerificationRequests = pgTable('emailVerificationRequests', {
+  id: text('id').primaryKey().notNull(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id),
+  email: text('email').notNull(),
+  code: text('code').notNull(),
   expiresAt: integer('expires_at').notNull(),
 });

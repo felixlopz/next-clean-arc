@@ -10,6 +10,7 @@ import {
 import { InputParseError } from '@/src/entities/errors/common';
 import { Cookie } from '@/src/entities/models/cookie';
 import { SESSION_COOKIE } from '@/config';
+import { User } from '@/src/entities/models/user';
 
 export async function loginAction(email: string, password: string) {
   const instrumentationService = getInjection('IInstrumentationService');
@@ -17,10 +18,16 @@ export async function loginAction(email: string, password: string) {
     'signIn',
     { recordResponse: true },
     async () => {
-      let sessionCookie: Cookie;
+      let existingUser: Pick<User, 'id' | 'emailVerified'>;
+
       try {
         const signInController = getInjection('ISignInController');
-        sessionCookie = await signInController({ email, password });
+        const { cookie, user } = await signInController({ email, password });
+
+        const storeCookie = await cookies();
+        storeCookie.set(cookie.name, cookie.value, cookie.attributes);
+
+        existingUser = user;
       } catch (error) {
         if (
           error instanceof InputParseError ||
@@ -39,12 +46,10 @@ export async function loginAction(email: string, password: string) {
         };
       }
 
-      const storeCookie = await cookies();
-      storeCookie.set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
+      if (!existingUser.emailVerified) {
+        redirect('/verify-email');
+      }
+
       redirect('/');
     }
   );
@@ -55,20 +60,23 @@ export async function signUp(name: string, email: string, password: string) {
   return await instrumentationService.instrumentServerAction(
     'signUp',
     { recordResponse: true },
+
     async () => {
-      let sessionCookie: Cookie;
+      let newUser: Pick<User, 'id' | 'emailVerified'>;
+
       try {
         const signUpController = getInjection('ISignUpController');
 
-        const { cookie } = await signUpController({
+        const { cookie, user } = await signUpController({
           email,
           name,
           password,
         });
 
-        sessionCookie = cookie;
+        const cookieStore = await cookies();
+        cookieStore.set(cookie.name, cookie.value, cookie.attributes);
 
-        console.log(sessionCookie);
+        newUser = user;
       } catch (err) {
         if (err instanceof InputParseError) {
           return {
@@ -89,12 +97,10 @@ export async function signUp(name: string, email: string, password: string) {
             (err as Error).message,
         };
       }
-      const cookieStore = await cookies();
-      cookieStore.set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
+      if (!newUser.emailVerified) {
+        redirect('/verify-email');
+      }
+
       redirect('/');
     }
   );
@@ -108,11 +114,17 @@ export async function signOut() {
     async () => {
       const storedCookie = await cookies();
       const sessionToken = storedCookie.get(SESSION_COOKIE)?.value;
-
-      let blankCookie: Cookie;
       try {
         const signOutController = getInjection('ISignOutController');
-        blankCookie = await signOutController(sessionToken);
+        const blankCookie = await signOutController(sessionToken);
+
+        storedCookie.set(
+          blankCookie.name,
+          blankCookie.value,
+          blankCookie.attributes
+        );
+
+        redirect('/sign-in');
       } catch (err) {
         if (
           err instanceof UnauthenticatedError ||
@@ -124,14 +136,6 @@ export async function signOut() {
         crashReporterService.report(err);
         throw err;
       }
-
-      storedCookie.set(
-        blankCookie.name,
-        blankCookie.value,
-        blankCookie.attributes
-      );
-
-      redirect('/sign-in');
     }
   );
 }

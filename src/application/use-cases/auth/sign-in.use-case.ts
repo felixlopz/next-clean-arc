@@ -4,6 +4,7 @@ import { Session } from '@/src/entities/models/session';
 import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 import type { IUsersRepository } from '@/src/application/repositories/users.repository.interface';
 import type { IAuthenticationService } from '@/src/application/services/authentication.service.interface';
+import { User } from '@/src/entities/models/user';
 
 export type ISignInUseCase = ReturnType<typeof signInUseCase>;
 
@@ -16,7 +17,11 @@ export const signInUseCase =
   (input: {
     email: string;
     password: string;
-  }): Promise<{ session: Session; cookie: Cookie }> => {
+  }): Promise<{
+    session: Session;
+    cookie: Cookie;
+    user: Pick<User, 'id' | 'emailVerified'>;
+  }> => {
     return instrumentationService.startSpan(
       { name: 'signIn Use Case', op: 'function' },
       async () => {
@@ -35,7 +40,11 @@ export const signInUseCase =
           throw new AuthenticationError('Incorrect username or password');
         }
 
-        return await authenticationService.createSession(existingUser);
+        const { session, cookie } = await authenticationService.createSession(
+          existingUser
+        );
+
+        return { session, cookie, user: existingUser };
       }
     );
   };

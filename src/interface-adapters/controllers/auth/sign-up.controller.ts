@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { InputParseError } from '@/src/entities/errors/common';
 import { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 import { ISignUpUseCase } from '@/src/application/use-cases/auth/sign-up.use-case';
+import { IVerifyEmailRequestRepository } from '@/src/application/repositories/verify-email-request.repository.interface';
+import { IEmailService } from '@/src/application/services/email.service.interface';
 
 const inputSchema = z.object({
   name: z.string().min(3).max(31),
@@ -30,7 +32,9 @@ export type ISignUpController = ReturnType<typeof signUpController>;
 export const signUpController =
   (
     instrumentationService: IInstrumentationService,
-    signUpUseCase: ISignUpUseCase
+    signUpUseCase: ISignUpUseCase,
+    verifyEmailRequestRepository: IVerifyEmailRequestRepository,
+    emailService: IEmailService
   ) =>
   async (
     input: Partial<z.infer<typeof inputSchema>>
@@ -44,7 +48,24 @@ export const signUpController =
           throw new InputParseError('Invalid data', { cause: inputParseError });
         }
 
-        return await signUpUseCase(data);
+        const { cookie, session, user } = await signUpUseCase(data);
+
+        await instrumentationService.startSpan(
+          {
+            name: 'SignUp Controller SideEffect > createEmailVerificationRequest',
+          },
+          async () => {
+            const { code } =
+              await verifyEmailRequestRepository.createEmailVerificationRequest(
+                user.id,
+                data.email
+              );
+
+            await emailService.sendVerificationEmail(data.email, code);
+          }
+        );
+
+        return { cookie, session, user };
       }
     );
   };

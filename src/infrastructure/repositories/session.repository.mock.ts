@@ -18,8 +18,16 @@ export class MockSessionsRepository implements ISessionsRepository {
     return '';
   }
 
+  async invalidateSession(sessionId: string): Promise<void> {}
+
   async getCurrentSession(
-    sessionToken: string | null
+    sessionToken: string | undefined
+  ): Promise<SessionValidationResult> {
+    return { session: null, user: null };
+  }
+
+  async getCurrentSessionByUserId(
+    userId: string
   ): Promise<SessionValidationResult> {
     return { session: null, user: null };
   }

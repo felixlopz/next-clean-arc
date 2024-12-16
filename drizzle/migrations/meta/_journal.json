@@ -15,6 +15,20 @@
       "when": 1734184046710,
       "tag": "0001_brown_doctor_doom",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1734274779463,
+      "tag": "0002_third_roulette",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1734276347799,
+      "tag": "0003_flaky_marvex",
+      "breakpoints": true
     }
   ]
 }

@@ -5,15 +5,13 @@ import { MockAuthenticationService } from '@/src/infrastructure/services/authent
 
 import { signInUseCase } from '@/src/application/use-cases/auth/sign-in.use-case';
 import { signUpUseCase } from '@/src/application/use-cases/auth/sign-up.use-case';
-// import { signOutUseCase } from '@/src/application/use-cases/auth/sign-out.use-case';
+import { signOutUseCase } from '@/src/application/use-cases/auth/sign-out.use-case';
 
 import { signInController } from '@/src/interface-adapters/controllers/auth/sign-in.controller';
 import { signUpController } from '@/src/interface-adapters/controllers/auth/sign-up.controller';
-// import { signOutController } from '@/src/interface-adapters/controllers/auth/sign-out.controller';
+import { signOutController } from '@/src/interface-adapters/controllers/auth/sign-out.controller';
 
 import { DI_SYMBOLS } from '@/di/types';
-import { signOutController } from '@/src/interface-adapters/controllers/auth/sign-out.controller';
-import { signOutUseCase } from '@/src/application/use-cases/auth/sign-out.use-case';
 
 export function createAuthenticationModule() {
   const authenticationModule = createModule();
@@ -69,6 +67,8 @@ export function createAuthenticationModule() {
     .toHigherOrderFunction(signUpController, [
       DI_SYMBOLS.IInstrumentationService,
       DI_SYMBOLS.ISignUpUseCase,
+      DI_SYMBOLS.IVerifyEmailRequestRepository,
+      DI_SYMBOLS.IEmailService,
     ]);
 
   authenticationModule

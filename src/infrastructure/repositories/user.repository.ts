@@ -33,7 +33,11 @@ export class UsersRepository implements IUsersRepository {
             () => query.execute()
           );
 
-          return user;
+          if (user == null) {
+            return undefined;
+          }
+
+          return { ...user, emailVerified: Boolean(user?.emailVerified) };
         } catch (err) {
           this.crashReporterService.report(err);
           throw err; // TODO: convert to Entities error
@@ -59,7 +63,11 @@ export class UsersRepository implements IUsersRepository {
             () => query.execute()
           );
 
-          return user;
+          if (user == null) {
+            return undefined;
+          }
+
+          return { ...user, emailVerified: Boolean(user?.emailVerified) };
         } catch (err) {
           this.crashReporterService.report(err);
           throw err; // TODO: convert to Entities error
@@ -81,11 +89,11 @@ export class UsersRepository implements IUsersRepository {
             id: input.id,
             name: input.name,
             email: input.email,
-            password: password_hash
+            password: password_hash,
           };
           const query = db.insert(users).values(newUser).returning();
 
-          const [created] = await this.instrumentationService.startSpan(
+          const [createdUser] = await this.instrumentationService.startSpan(
             {
               name: query.toSQL().sql,
               op: 'db.query',
@@ -94,8 +102,11 @@ export class UsersRepository implements IUsersRepository {
             () => query.execute()
           );
 
-          if (created) {
-            return created;
+          if (createdUser) {
+            return {
+              ...createdUser,
+              emailVerified: Boolean(createdUser.emailVerified),
+            };
           } else {
             throw new DatabaseOperationError('Cannot create user.');
           }
@@ -103,6 +114,18 @@ export class UsersRepository implements IUsersRepository {
           this.crashReporterService.report(err);
           throw err; // TODO: convert to Entities error
         }
+      }
+    );
+  }
+
+  async setUserEmailAsVerified(userId: User['id']): Promise<void> {
+    return await this.instrumentationService.startSpan(
+      { name: 'UserRepository > setUserEmailAsVerified' },
+      async () => {
+        await db
+          .update(users)
+          .set({ emailVerified: 1 })
+          .where(eq(users.id, userId));
       }
     );
   }

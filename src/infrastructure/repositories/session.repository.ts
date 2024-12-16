@@ -20,6 +20,7 @@ import {
   NotFoundError,
 } from '@/src/entities/errors/common';
 import { User } from '@/src/entities/models/user';
+import { cache } from 'react';
 
 export class SessionsRepository implements ISessionsRepository {
   constructor(
@@ -64,6 +65,7 @@ export class SessionsRepository implements ISessionsRepository {
 
           const user: User = {
             ...data.users,
+            emailVerified: Boolean(data.users.emailVerified),
           };
 
           if (Date.now() >= session.expiresAt.getTime()) {

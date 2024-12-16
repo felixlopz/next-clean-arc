@@ -17,7 +17,9 @@ export const signInController =
     instrumentationService: IInstrumentationService,
     signInUseCase: ISignInUseCase
   ) =>
-  async (input: Partial<z.infer<typeof inputSchema>>): Promise<Cookie> => {
+  async (
+    input: Partial<z.infer<typeof inputSchema>>
+  ): Promise<ReturnType<typeof signInUseCase>> => {
     return await instrumentationService.startSpan(
       { name: 'signIn Controller' },
       async () => {
@@ -27,8 +29,7 @@ export const signInController =
           throw new InputParseError('Invalid data', { cause: inputParseError });
         }
 
-        const { cookie } = await signInUseCase(data);
-        return cookie;
+        return await signInUseCase(data);
       }
     );
   };

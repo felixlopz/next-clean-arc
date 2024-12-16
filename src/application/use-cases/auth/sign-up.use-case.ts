@@ -5,7 +5,6 @@ import { User } from '@/src/entities/models/user';
 import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 import type { IAuthenticationService } from '@/src/application/services/authentication.service.interface';
 import type { IUsersRepository } from '@/src/application/repositories/users.repository.interface';
-import { ISessionRepository } from '@/src/application/repositories/session.repository.interface';
 
 export type ISignUpUseCase = ReturnType<typeof signUpUseCase>;
 
@@ -22,7 +21,7 @@ export const signUpUseCase =
   }): Promise<{
     session: Session;
     cookie: Cookie;
-    user: Pick<User, 'id'>;
+    user: Pick<User, 'id' | 'emailVerified'>;
   }> => {
     return instrumentationService.startSpan(
       { name: 'signUp Use Case', op: 'function' },
@@ -50,7 +49,7 @@ export const signUpUseCase =
           session,
           user: {
             id: newUser.id,
-            email: newUser.email,
+            emailVerified: newUser.emailVerified,
           },
         };
       }

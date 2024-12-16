@@ -12,8 +12,12 @@ export default async function Home() {
     storedCookie.get(SESSION_COOKIE)?.value ?? undefined
   );
 
-  if (user == null) {
+  if (session == null) {
     redirect('/sign-in');
+  }
+
+  if (!user.emailVerified) {
+    return redirect('/verify-email');
   }
 
   return (

@@ -7,7 +7,8 @@ export const userSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6).max(255),
   role: userRoleSchema,
-  createdAt: z.date()
+  emailVerified: z.boolean(),
+  createdAt: z.date(),
 });
 
 export type User = z.infer<typeof userSchema>;
@@ -15,6 +16,5 @@ export type User = z.infer<typeof userSchema>;
 export const createUserSchema = userSchema
   .pick({ id: true, name: true, email: true })
   .merge(z.object({ password: z.string().min(6).max(255) }));
-
 
 export type CreateUser = z.infer<typeof createUserSchema>;
