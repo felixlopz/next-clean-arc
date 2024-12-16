@@ -28,7 +28,7 @@ export const signUpUseCase =
       async () => {
         const existingUser = await usersRepository.getUserByEmail(input.email);
         if (existingUser) {
-          throw new AuthenticationError('email already exists');
+          throw new AuthenticationError('Email already exists');
         }
 
         const userId = authenticationService.generateUserId();
