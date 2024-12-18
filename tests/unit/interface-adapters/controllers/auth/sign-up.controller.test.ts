@@ -24,12 +24,12 @@ it('returns cookie', async () => {
   });
 });
 
-it('throws for invalid input', () => {
+it('throws for invalid input', async () => {
   // empty object
-  expect(signUpController({})).rejects.toBeInstanceOf(InputParseError);
+  await expect(signUpController({})).rejects.toBeInstanceOf(InputParseError);
 
   // below min length
-  expect(
+  await expect(
     signUpController({
       name: 'no',
       email: 'new@mail.com',
@@ -47,8 +47,8 @@ it('throws for invalid input', () => {
   //   ).rejects.toBeInstanceOf(InputParseError);
 });
 
-it('throws for existing email name', () => {
-  expect(
+it('throws for existing email name', async () => {
+  await expect(
     signUpController({
       name: 'one',
       email: 'one@mail.com',

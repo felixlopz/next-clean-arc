@@ -19,35 +19,36 @@ it('signs in with valid input', async () => {
   expect(result).toHaveProperty('user');
 });
 
-it('throws for invalid input', () => {
-  expect(signInController({ email: '' })).rejects.toBeInstanceOf(
+it('throws for invalid input', async () => {
+  await expect(signInController({ email: '' })).rejects.toBeInstanceOf(
     InputParseError
   );
-  expect(signInController({ password: '' })).rejects.toBeInstanceOf(
+
+  await expect(signInController({ password: '' })).rejects.toBeInstanceOf(
     InputParseError
   );
-  expect(signInController({ email: 'no' })).rejects.toBeInstanceOf(
+  await expect(signInController({ email: 'no' })).rejects.toBeInstanceOf(
     InputParseError
   );
-  expect(signInController({ password: 'no' })).rejects.toBeInstanceOf(
+  await expect(signInController({ password: 'no' })).rejects.toBeInstanceOf(
     InputParseError
   );
-  expect(
+  await expect(
     signInController({ email: 'one@mail.com', password: 'short' })
   ).rejects.toBeInstanceOf(InputParseError);
-  expect(
+  await expect(
     signInController({
       email: 'oneverylongusernamethatmakesnosense',
       password: 'short',
     })
   ).rejects.toBeInstanceOf(InputParseError);
-  expect(
+  await expect(
     signInController({
       email: 'one@mail.com',
       password: 'oneverylongpasswordthatmakesnosense',
     })
   ).rejects.toBeInstanceOf(InputParseError);
-  expect(
+  await expect(
     signInController({
       email: 'oneverylongusernamethatmakesnosense',
       password: 'oneverylongpasswordthatmakesnosense',
@@ -59,7 +60,7 @@ it('throws for invalid credentials', async () => {
   await expect(
     signInController({ email: 'nonexisting', password: 'doesntmatter' })
   ).rejects.toBeInstanceOf(InputParseError);
-  expect(
+  await expect(
     signInController({ email: 'one@mail.com', password: 'wrongpass' })
   ).rejects.toBeInstanceOf(AuthenticationError);
 });

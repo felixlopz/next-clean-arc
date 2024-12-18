@@ -18,8 +18,8 @@ it('returns session, cookie and user', async () => {
   expect(result).toHaveProperty('user');
 });
 
-it('throws for invalid input', () => {
-  expect(() =>
+it('throws for invalid input', async () => {
+  await expect(() =>
     signUpUseCase({
       name: 'one',
       email: 'one@mail.com',
