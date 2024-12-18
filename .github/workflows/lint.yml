@@ -1,12 +1,10 @@
-name: Vitest
+name: Lint
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+
 jobs:
-  Vitest:
+  Lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,13 +19,3 @@ jobs:
           bun-version: 1.1.22
       - name: Install dependencies
         run: bun install
-      - name: Run tests with coverage
-        run: bun run coverage
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          verbose: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
