@@ -22,7 +22,7 @@ export function EmailVerificationForm() {
     <form action={action} className="flex gap-x-4">
       <div>
         <Input id="form-veryfy.code" name="code" required />
-        <p className="text-sm mt-2">{state.message}</p>
+        <p className="mt-2 text-sm">{state.message}</p>
       </div>
       <Button variant="secondary" type="submit" disabled={isPending}>
         {isPending ? <Loader2 className="animate-spin" /> : 'Submit'}

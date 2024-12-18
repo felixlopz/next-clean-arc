@@ -54,7 +54,7 @@ export default function SignUpForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-12 rounded-md border border-input p-8"
       >
-        <div className="flex justify-between items-center mb-4">
+        <div className="mb-4 flex items-center justify-between">
           <h3 className="text-2xl">Sign Up</h3>
           <span className="text-[0.8rem]">
             Already Registred?{' '}
@@ -63,7 +63,7 @@ export default function SignUpForm() {
             </Link>
           </span>
         </div>
-        <div className="space-y-4 flex flex-col">
+        <div className="flex flex-col space-y-4">
           <FormField
             control={form.control}
             name="name"

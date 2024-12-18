@@ -31,12 +31,12 @@ export default async function VerifyEmailPage() {
   }
 
   return (
-    <div className="max-w-screen-md mx-auto mt-8 flex flex-col gap-y-4 items-center">
+    <div className="mx-auto mt-8 flex max-w-screen-md flex-col items-center gap-y-4">
       <div>
         <span className="text-md">
           Please verify your email: {user.email} or{' '}
         </span>
-        <LogoutButton variant="link" className="text-secondary p-0 underline">
+        <LogoutButton variant="link" className="p-0 text-secondary underline">
           Logout
         </LogoutButton>
       </div>

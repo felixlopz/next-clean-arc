@@ -21,7 +21,7 @@ export default async function Home() {
   }
 
   return (
-    <div className="max-w-screen-sm mx-auto flex flex-col items-center p-8">
+    <div className="mx-auto flex max-w-screen-sm flex-col items-center p-8">
       <span className="mb-4">Hello {user.name}</span>
       <LogoutButton variant="secondary" />
     </div>
