@@ -18,11 +18,13 @@ jobs:
         run: bun install
       - name: Run lint
         run: bun run lint
-      - name: Run tests with coverage
-        run: bun run coverage
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          verbose: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Run test
+        run: bun run test
+      # - name: Run tests with coverage
+      #   run: bun run coverage
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v4
+      #   with:
+      #     verbose: true
+      #   env:
+      #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
