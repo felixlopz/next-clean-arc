@@ -42,7 +42,8 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.17.0",
     "@types/node": "^20",
     "@types/pg": "^8.11.10",
     "@types/react": "^19",
@@ -68,11 +69,9 @@
     }
   },
   "lint-staged": {
-    "*{.js,.jsx,.ts,.tsx}": [
-      "eslint --cache --fix"
-    ],
-    "*{.js,.jsx,.ts,.tsx,.css}": [
-      "prettier --cache --write --ignore-unknown"
+    "*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write",
+      "eslint --fix"
     ]
   }
 }
