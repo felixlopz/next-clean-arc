@@ -10,6 +10,7 @@ import {
 import { InputParseError } from '@/src/entities/errors/common';
 import { SESSION_COOKIE } from '@/config';
 import { User } from '@/src/entities/models/user';
+import { Cookie } from '@/src/entities/models/cookie';
 
 export async function loginAction(email: string, password: string) {
   const instrumentationService = getInjection('IInstrumentationService');
@@ -111,19 +112,12 @@ export async function signOut() {
     'signOut',
     { recordResponse: true },
     async () => {
+      let blankCookie: Cookie;
       const storedCookie = await cookies();
       const sessionToken = storedCookie.get(SESSION_COOKIE)?.value;
       try {
         const signOutController = getInjection('ISignOutController');
-        const blankCookie = await signOutController(sessionToken);
-
-        storedCookie.set(
-          blankCookie.name,
-          blankCookie.value,
-          blankCookie.attributes
-        );
-
-        redirect('/sign-in');
+        blankCookie = await signOutController(sessionToken);
       } catch (err) {
         if (
           err instanceof UnauthenticatedError ||
@@ -135,6 +129,14 @@ export async function signOut() {
         crashReporterService.report(err);
         throw err;
       }
+
+      storedCookie.set(
+        blankCookie.name,
+        blankCookie.value,
+        blankCookie.attributes
+      );
+
+      redirect('/sign-in');
     }
   );
 }
