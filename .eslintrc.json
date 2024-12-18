@@ -47,6 +47,7 @@
     ]
   },
   "rules": {
+    "prettier/prettier": "error",
     "boundaries/no-unknown": "error",
     "boundaries/no-unknown-files": "error",
     "boundaries/element-types": [
