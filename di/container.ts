@@ -31,8 +31,8 @@ ApplicationContainer.load(
   createVerifyEmailRequestModule()
 );
 
-ApplicationContainer.load(Symbol('EmailService'), createEmailModule());
-ApplicationContainer.load(Symbol('CommonService'), createCommonModule());
+ApplicationContainer.load(Symbol('EmailModule'), createEmailModule());
+ApplicationContainer.load(Symbol('CommonModule'), createCommonModule());
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(
   symbol: K

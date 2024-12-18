@@ -9,7 +9,7 @@ export function createCommonModule() {
   } else {
     commonModule
       .bind(DI_SYMBOLS.ICommonService)
-      .toClass(CommonService, [DI_SYMBOLS.ICommonService]);
+      .toClass(CommonService, [DI_SYMBOLS.IInstrumentationService]);
   }
 
   return commonModule;
