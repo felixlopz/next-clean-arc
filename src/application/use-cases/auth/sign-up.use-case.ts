@@ -40,9 +40,8 @@ export const signUpUseCase =
           password: input.password,
         });
 
-        const { cookie, session } = await authenticationService.createSession(
-          newUser
-        );
+        const { cookie, session } =
+          await authenticationService.createSession(newUser);
 
         return {
           cookie,

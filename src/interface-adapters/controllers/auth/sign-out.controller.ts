@@ -19,9 +19,8 @@ export const signOutController =
         if (!sessionToken) {
           throw new InputParseError('Must provide a session ID');
         }
-        const { session } = await authenticationService.validateSession(
-          sessionToken
-        );
+        const { session } =
+          await authenticationService.validateSession(sessionToken);
 
         const { blankCookie } = await signOutUseCase(session.id);
         return blankCookie;

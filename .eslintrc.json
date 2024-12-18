@@ -1,6 +1,6 @@
 {
   "extends": ["next/core-web-vitals"],
-  "plugins": ["boundaries"],
+  "plugins": ["boundaries", "prettier"],
   "settings": {
     "boundaries/include": ["src/**/*", "app/**/*", "di/**/*"],
     "boundaries/elements": [
@@ -47,6 +47,7 @@
     ]
   },
   "rules": {
+    "prettier/prettier": ["error"],
     "boundaries/no-unknown": "error",
     "boundaries/no-unknown-files": "error",
     "boundaries/element-types": [

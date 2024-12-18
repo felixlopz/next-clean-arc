@@ -40,9 +40,8 @@ export const signInUseCase =
           throw new AuthenticationError('Incorrect username or password');
         }
 
-        const { session, cookie } = await authenticationService.createSession(
-          existingUser
-        );
+        const { session, cookie } =
+          await authenticationService.createSession(existingUser);
 
         return { session, cookie, user: existingUser };
       }
