@@ -53,7 +53,7 @@ export default function SignInForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="mt-12 rounded-md border border-input p-8"
       >
-        <div className="flex justify-between items-center mb-4">
+        <div className="mb-4 flex items-center justify-between">
           <h3 className="text-2xl">Sign In</h3>
           <span className="text-[0.8rem]">
             Not Registred?{' '}
@@ -62,26 +62,26 @@ export default function SignInForm() {
             </Link>
           </span>
         </div>
-        <div className="space-y-4 flex flex-col">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    className={cn([
-                      form.formState.errors.email ? 'border-destructive' : '',
-                    ])}
-                    type="email"
-                    placeholder="johndoe@email.com"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+<div className="flex flex-col space-y-4">
+<FormField
+control={form.control}
+name="email"
+render={({ field }) => (
+<FormItem>
+<FormLabel>Email</FormLabel>
+<FormControl>
+<Input
+  className={cn([
+    form.formState.errors.email ? 'border-destructive' : '',
+  ])}
+  type="email"
+  placeholder="johndoe@email.com"
+  {...field}
+/>
+</FormControl>
+<FormMessage />
+</FormItem>
+)}
           />
           <FormField
             control={form.control}
