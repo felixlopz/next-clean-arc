@@ -12,6 +12,7 @@ export function createVerifyEmailRequestModule() {
       .toClass(VerifyEmailRequestRepository, [
         DI_SYMBOLS.IInstrumentationService,
         DI_SYMBOLS.ICrashReporterService,
+        DI_SYMBOLS.ICommonService,
       ]);
   }
 

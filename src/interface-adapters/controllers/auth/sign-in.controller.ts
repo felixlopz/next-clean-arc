@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 import { ISignInUseCase } from '@/src/application/use-cases/auth/sign-in.use-case';
 import { InputParseError } from '@/src/entities/errors/common';
-import { Cookie } from '@/src/entities/models/cookie';
 import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 
 const inputSchema = z.object({

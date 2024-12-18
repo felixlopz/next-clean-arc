@@ -20,6 +20,7 @@ import { ISignOutController } from '@/src/interface-adapters/controllers/auth/si
 import { IVerifyEmailController } from '@/src/interface-adapters/controllers/auth/verify-email.controller';
 import { IResendVerifyEmailUseCase } from '@/src/application/use-cases/auth/resend-verify-email.use-case';
 import { IResendVerifyEmaiController } from '@/src/interface-adapters/controllers/auth/resend-verify-email.controller';
+import { ICommonService } from '@/src/application/services/common.service.interface';
 
 export const DI_SYMBOLS = {
   // Services
@@ -28,6 +29,7 @@ export const DI_SYMBOLS = {
   IInstrumentationService: Symbol.for('IInstrumentationService'),
   ICrashReporterService: Symbol.for('ICrashReporterService'),
   IEmailService: Symbol.for('IEmailService'),
+  ICommonService: Symbol.for('ICommonService'),
 
   // Repositories
   IUsersRepository: Symbol.for('IUsersRepository'),
@@ -56,6 +58,7 @@ export interface DI_RETURN_TYPES {
   ITransactionManagerService: ITransactionManagerService;
   IInstrumentationService: IInstrumentationService;
   ICrashReporterService: ICrashReporterService;
+  ICommonService: ICommonService;
   IEmailService: IEmailService;
 
   // Repositories

@@ -8,7 +8,6 @@ import {
   UnauthenticatedError,
 } from '@/src/entities/errors/auth';
 import { InputParseError } from '@/src/entities/errors/common';
-import { Cookie } from '@/src/entities/models/cookie';
 import { SESSION_COOKIE } from '@/config';
 import { User } from '@/src/entities/models/user';
 

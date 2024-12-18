@@ -9,14 +9,15 @@ import { IInstrumentationService } from '@/src/application/services/instrumentat
 import { DatabaseOperationError } from '@/src/entities/errors/common';
 import { EmailVerificationRequest } from '@/src/entities/models/email-verification-request';
 import { User } from '@/src/entities/models/user';
-import { generateRandomOTP } from '@/src/utils';
+import { ICommonService } from '@/src/application/services/common.service.interface';
 
 export class VerifyEmailRequestRepository
   implements IVerifyEmailRequestRepository
 {
   constructor(
     private readonly instrumentationService: IInstrumentationService,
-    private readonly crashReporterService: ICrashReporterService
+    private readonly crashReporterService: ICrashReporterService,
+    private readonly commonService: ICommonService
   ) {}
 
   async createEmailVerificationRequest(
@@ -31,7 +32,7 @@ export class VerifyEmailRequestRepository
           const expiresAt = new Date(Date.now() + 1000 * 60 * 10);
           const code = this.instrumentationService.startSpan(
             { name: 'generate random otp', op: 'function' },
-            () => generateRandomOTP()
+            () => this.commonService.generateRandomOTP()
           );
 
           const query = db

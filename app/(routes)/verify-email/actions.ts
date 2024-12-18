@@ -24,6 +24,8 @@ export async function verifyEmailAction(
     'verifyEmail',
     { recordResponse: true },
     async () => {
+      _prev.message = '';
+
       try {
         const storedCookie = await cookies();
         const sessionId = storedCookie.get(SESSION_COOKIE)?.value;
@@ -54,9 +56,7 @@ export async function verifyEmailAction(
   );
 }
 
-export async function resendEmailVerificationCodeAction(
-  _prev: ActionResult
-): Promise<ActionResult> {
+export async function resendEmailVerificationCodeAction(): Promise<ActionResult> {
   const instrumentationService = getInjection('IInstrumentationService');
   return await instrumentationService.instrumentServerAction(
     'resendVerifyEmail',

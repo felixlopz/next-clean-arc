@@ -9,8 +9,9 @@ import { createAuthenticationModule } from '@/di/modules/authentication.module';
 import { createTransactionManagerModule } from '@/di/modules/database.module';
 import { createUsersModule } from '@/di/modules/users.module';
 import { createSessionsModule } from '@/di/modules/session.module';
-import { createVerifyEmailRequestModule } from './modules/verify-email-request.module';
-import { createEmailModule } from './modules/email.module';
+import { createVerifyEmailRequestModule } from '@/di/modules/verify-email-request.module';
+import { createEmailModule } from '@/di/modules/email.module';
+import { createCommonModule } from '@/di/modules/common.module';
 
 const ApplicationContainer = createContainer();
 
@@ -31,6 +32,7 @@ ApplicationContainer.load(
 );
 
 ApplicationContainer.load(Symbol('EmailService'), createEmailModule());
+ApplicationContainer.load(Symbol('CommonService'), createCommonModule());
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(
   symbol: K

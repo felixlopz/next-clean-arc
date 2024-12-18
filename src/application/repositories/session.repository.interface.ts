@@ -3,7 +3,6 @@ import {
   SessionFlags,
   SessionValidationResult,
 } from '@/src/entities/models/session';
-import { User } from '@/src/entities/models/user';
 
 export interface ISessionsRepository {
   createSession(

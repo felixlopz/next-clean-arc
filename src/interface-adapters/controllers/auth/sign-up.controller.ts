@@ -3,8 +3,6 @@ import { z } from 'zod';
 import { InputParseError } from '@/src/entities/errors/common';
 import { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 import { ISignUpUseCase } from '@/src/application/use-cases/auth/sign-up.use-case';
-import { IVerifyEmailRequestRepository } from '@/src/application/repositories/verify-email-request.repository.interface';
-import { IEmailService } from '@/src/application/services/email.service.interface';
 import { IAuthenticationService } from '@/src/application/services/authentication.service.interface';
 
 const inputSchema = z.object({

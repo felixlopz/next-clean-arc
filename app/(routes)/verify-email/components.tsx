@@ -42,7 +42,7 @@ export function ResendEmailVerificationCodeForm() {
   );
   return (
     <form action={action} className="text-sm">
-      Didn't recieve an email or code is expired?{' '}
+      {` Didn't recieve an email or code is expired?`}{' '}
       <Button type="submit" className="p-0 underline">
         Resend code
       </Button>

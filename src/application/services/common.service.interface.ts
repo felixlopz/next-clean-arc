@@ -13,3 +13,8 @@ export function generateRandomRecoveryCode(): string {
   const recoveryCode = encodeBase32UpperCaseNoPadding(recoveryCodeBytes);
   return recoveryCode;
 }
+
+export interface ICommonService {
+  generateRandomOTP(): string;
+  generateRandomRecoveryCode(): string;
+}

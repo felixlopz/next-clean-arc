@@ -2,7 +2,7 @@ import { IInstrumentationService } from '@/src/application/services/instrumentat
 
 export class MockInstrumentationService implements IInstrumentationService {
   startSpan<T>(
-    _: { name: string; op?: string; attributes?: Record<string, any> },
+    _: { name: string; op?: string; attributes?: Record<string, unknown> },
     callback: () => T
   ): T {
     return callback();
@@ -10,7 +10,7 @@ export class MockInstrumentationService implements IInstrumentationService {
 
   async instrumentServerAction<T>(
     _: string,
-    __: Record<string, any>,
+    __: Record<string, unknown>,
     callback: () => T
   ): Promise<T> {
     return callback();

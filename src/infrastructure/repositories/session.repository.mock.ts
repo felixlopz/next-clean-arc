@@ -1,16 +1,14 @@
 import { ISessionsRepository } from '@/src/application/repositories/session.repository.interface';
 import {
-  SessionFlags,
   Session,
   SessionValidationResult,
 } from '@/src/entities/models/session';
 
 export class MockSessionsRepository implements ISessionsRepository {
-  async createSession(
-    token: string,
-    userId: string,
-    flags: SessionFlags
-  ): Promise<Session> {
+  async createSession(): // token: string,
+  // userId: string,
+  // flags: SessionFlags
+  Promise<Session> {
     return { expiresAt: new Date(), id: 'random_session_id', userId: '1' };
   }
 
@@ -18,23 +16,19 @@ export class MockSessionsRepository implements ISessionsRepository {
     return '';
   }
 
-  async invalidateSession(sessionId: string): Promise<void> {}
+  async invalidateSession(): Promise<void> {}
 
-  async getCurrentSession(
-    sessionToken: string | undefined
-  ): Promise<SessionValidationResult> {
+  async getCurrentSession(): Promise<SessionValidationResult> {
     return { session: null, user: null };
   }
 
-  async getCurrentSessionByUserId(
-    userId: string
-  ): Promise<SessionValidationResult> {
+  async getCurrentSessionByUserId(): Promise<SessionValidationResult> {
     return { session: null, user: null };
   }
 
-  async validateSessionToken(token: string): Promise<SessionValidationResult> {
+  async validateSessionToken(): Promise<SessionValidationResult> {
     return { session: null, user: null };
   }
 
-  async invalidateUserSession(userId: string): Promise<void> {}
+  async invalidateUserSession(): Promise<void> {}
 }

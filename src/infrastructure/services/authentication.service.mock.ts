@@ -15,10 +15,9 @@ export class MockAuthenticationService implements IAuthenticationService {
     this._sessions = {};
   }
 
-  async createAndSendVerificationEmailRequest(
-    userId: User['id'],
-    email: string
-  ): Promise<void> {}
+  async createAndSendVerificationEmailRequest(): // userId: User['id'],
+  // email: string
+  Promise<void> {}
 
   validatePasswords(
     inputPassword: string,

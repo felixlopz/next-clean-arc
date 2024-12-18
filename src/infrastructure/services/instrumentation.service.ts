@@ -4,7 +4,7 @@ import { IInstrumentationService } from '@/src/application/services/instrumentat
 
 export class InstrumentationService implements IInstrumentationService {
   startSpan<T>(
-    options: { name: string; op?: string; attributes?: Record<string, any> },
+    options: { name: string; op?: string; attributes?: Record<string, never> },
     callback: () => T
   ): T {
     return Sentry.startSpan(options, callback);
@@ -12,7 +12,7 @@ export class InstrumentationService implements IInstrumentationService {
 
   instrumentServerAction<T>(
     name: string,
-    options: Record<string, any>,
+    options: Record<string, never>,
     callback: () => T
   ): Promise<T> {
     return Sentry.withServerActionInstrumentation(name, options, callback);

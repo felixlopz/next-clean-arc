@@ -1,5 +1,4 @@
 import { Cookie } from '@/src/entities/models/cookie';
-import { EmailVerificationRequest } from '@/src/entities/models/email-verification-request';
 import { Session } from '@/src/entities/models/session';
 import { User } from '@/src/entities/models/user';
 

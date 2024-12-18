@@ -61,5 +61,10 @@ export class MockUsersRepository implements IUsersRepository {
     return newUser;
   }
 
-  async setUserEmailAsVerified(userId: User['id']): Promise<void> {}
+  async setUserEmailAsVerified(userId: User['id']): Promise<void> {
+    const user = this._users.find((u) => u.id === userId);
+    if (user == null) {
+      return;
+    }
+  }
 }

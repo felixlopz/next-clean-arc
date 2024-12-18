@@ -1,9 +1,7 @@
 import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 import type { IVerifyEmailRequestRepository } from '@/src/application/repositories/verify-email-request.repository.interface';
-import type { IUsersRepository } from '@/src/application/repositories/users.repository.interface';
 
 import { User } from '@/src/entities/models/user';
-import { AuthenticationError } from '@/src/entities/errors/auth';
 import { NotFoundError } from '@/src/entities/errors/common';
 import {
   VerificationCodeExpired,
