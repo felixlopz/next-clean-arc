@@ -1,5 +1,13 @@
 name: Test
-on: [push]
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  DATABASE_URL: 'something'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -18,13 +26,13 @@ jobs:
         run: bun install
       - name: Run lint
         run: bun run lint
-      - name: Run test
-        run: bun run test
-      # - name: Run tests with coverage
-      #   run: bun run coverage
-      # - name: Upload coverage to Codecov
-      #   uses: codecov/codecov-action@v4
-      #   with:
-      #     verbose: true
-      #   env:
-      #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Run tests with coverage
+        run: bun run coverage
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
