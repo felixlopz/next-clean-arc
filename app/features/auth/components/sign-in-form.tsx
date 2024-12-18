@@ -54,7 +54,7 @@ export default function SignInForm() {
         className="mt-12 rounded-md border border-input p-8"
       >
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="text-2xl">Sign In</h3>
+          <h3 className="text-2xl">Welcome!</h3>
           <span className="text-[0.8rem]">
             Not Registred?{' '}
             <Link href="/sign-up" className="underline">
