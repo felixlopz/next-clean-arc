@@ -3,7 +3,7 @@ import { IInstrumentationService } from '@/src/application/services/instrumentat
 import { UnauthenticatedError } from '@/src/entities/errors/auth';
 import { IResendVerifyEmailUseCase } from '@/src/application/use-cases/auth/resend-verify-email.use-case';
 
-export type IResendVerifyEmaiController = ReturnType<
+export type IResendVerifyEmailController = ReturnType<
   typeof resendVerifyEmailController
 >;
 

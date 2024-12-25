@@ -5,5 +5,5 @@ export interface IUsersRepository {
   getUser(id: User['id']): Promise<User | undefined>;
   getUserByEmail(email: User['email']): Promise<User | undefined>;
   createUser(input: CreateUser, tx?: ITransaction): Promise<User>;
-  setUserEmailAsVerified(userId: User['id']): Promise<void>;
+  setUserEmailAsVerified(userId: User['id']): Promise<User | undefined>;
 }

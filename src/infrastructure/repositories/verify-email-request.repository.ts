@@ -28,6 +28,7 @@ export class VerifyEmailRequestRepository
       { name: 'VerifyEmailRequestRepository > createEmailVerificationRequest' },
       async () => {
         try {
+          await this.deleteUserEmailVerificationRequest(userId);
           const id = createId();
           const expiresAt = new Date(Date.now() + 1000 * 60 * 10);
           const code = this.instrumentationService.startSpan(

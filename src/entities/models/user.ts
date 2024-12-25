@@ -1,4 +1,5 @@
-import { userRoleSchema } from '@/drizzle/schema';
+import { selectUserSchema, userRoleSchema, users } from '@/drizzle/schema';
+import { createInsertSchema } from 'drizzle-zod';
 import { z } from 'zod';
 
 export const userSchema = z.object({
@@ -12,6 +13,8 @@ export const userSchema = z.object({
 });
 
 export type User = z.infer<typeof userSchema>;
+
+export type DatabaseUser = z.infer<typeof selectUserSchema>;
 
 export const createUserSchema = userSchema
   .pick({ id: true, name: true, email: true })

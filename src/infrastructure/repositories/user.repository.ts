@@ -5,10 +5,18 @@ import { db } from '@/drizzle';
 import { users } from '@/drizzle/schema';
 import { IUsersRepository } from '@/src/application/repositories/users.repository.interface';
 import { DatabaseOperationError } from '@/src/entities/errors/common';
-import type { CreateUser, User } from '@/src/entities/models/user';
+import type {
+  CreateUser,
+  DatabaseUser,
+  User,
+} from '@/src/entities/models/user';
 import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 import type { ICrashReporterService } from '@/src/application/services/crash-reporter.service.interface';
 import { PASSWORD_SALT_ROUNDS } from '@/config';
+
+function userRepositoryPresenter(user: DatabaseUser): User {
+  return { ...user, emailVerified: Boolean(user.emailVerified) };
+}
 
 export class UsersRepository implements IUsersRepository {
   constructor(
@@ -37,7 +45,7 @@ export class UsersRepository implements IUsersRepository {
             return undefined;
           }
 
-          return { ...user, emailVerified: Boolean(user?.emailVerified) };
+          return userRepositoryPresenter(user);
         } catch (err) {
           this.crashReporterService.report(err);
           throw err; // TODO: convert to Entities error
@@ -67,7 +75,7 @@ export class UsersRepository implements IUsersRepository {
             return undefined;
           }
 
-          return { ...user, emailVerified: Boolean(user?.emailVerified) };
+          return userRepositoryPresenter(user);
         } catch (err) {
           this.crashReporterService.report(err);
           throw err; // TODO: convert to Entities error
@@ -103,10 +111,7 @@ export class UsersRepository implements IUsersRepository {
           );
 
           if (createdUser) {
-            return {
-              ...createdUser,
-              emailVerified: Boolean(createdUser.emailVerified),
-            };
+            return userRepositoryPresenter(createdUser);
           } else {
             throw new DatabaseOperationError('Cannot create user.');
           }
@@ -118,14 +123,21 @@ export class UsersRepository implements IUsersRepository {
     );
   }
 
-  async setUserEmailAsVerified(userId: User['id']): Promise<void> {
+  async setUserEmailAsVerified(userId: User['id']): Promise<User | undefined> {
     return await this.instrumentationService.startSpan(
       { name: 'UserRepository > setUserEmailAsVerified' },
       async () => {
-        await db
+        const [user] = await db
           .update(users)
           .set({ emailVerified: 1 })
-          .where(eq(users.id, userId));
+          .where(eq(users.id, userId))
+          .returning();
+
+        if (user == null) {
+          return undefined;
+        }
+
+        return userRepositoryPresenter(user);
       }
     );
   }

@@ -1,5 +1,6 @@
 import type { IInstrumentationService } from '@/src/application/services/instrumentation.service.interface';
 import { IUsersRepository } from '@/src/application/repositories/users.repository.interface';
+import { User } from '@/src/entities/models/user';
 
 export type ISetEmailAsVerifiedUseCase = ReturnType<
   typeof setEmailAsVerifiedUseCase
@@ -8,13 +9,13 @@ export type ISetEmailAsVerifiedUseCase = ReturnType<
 export const setEmailAsVerifiedUseCase =
   (
     instrumentationService: IInstrumentationService,
-    userRepositoyr: IUsersRepository
+    userRepository: IUsersRepository
   ) =>
-  (userId: string): Promise<void> => {
+  (userId: string): Promise<User | undefined> => {
     return instrumentationService.startSpan(
       { name: 'setUserEmailAsVerified Use Case', op: 'function' },
       async () => {
-        return userRepositoyr.setUserEmailAsVerified(userId);
+        return userRepository.setUserEmailAsVerified(userId);
       }
     );
   };

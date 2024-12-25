@@ -109,7 +109,7 @@ export function createAuthenticationModule() {
     ]);
 
   authenticationModule
-    .bind(DI_SYMBOLS.IResendVerifyEmaiController)
+    .bind(DI_SYMBOLS.IResendVerifyEmailController)
     .toHigherOrderFunction(resendVerifyEmailController, [
       DI_SYMBOLS.IInstrumentationService,
       DI_SYMBOLS.IAuthenticationService,

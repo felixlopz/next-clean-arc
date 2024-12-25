@@ -33,7 +33,7 @@ export class MockUsersRepository implements IUsersRepository {
         password: hashSync('password-three', PASSWORD_SALT_ROUNDS),
         name: 'three',
         role: 'user',
-        emailVerified: true,
+        emailVerified: false,
         createdAt: new Date(),
       },
     ];
@@ -61,10 +61,12 @@ export class MockUsersRepository implements IUsersRepository {
     return newUser;
   }
 
-  async setUserEmailAsVerified(userId: User['id']): Promise<void> {
+  async setUserEmailAsVerified(userId: User['id']): Promise<User | undefined> {
     const user = this._users.find((u) => u.id === userId);
     if (user == null) {
-      return;
+      return undefined;
     }
+
+    return { ...user, emailVerified: true };
   }
 }

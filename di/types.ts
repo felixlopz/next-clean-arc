@@ -19,7 +19,7 @@ import { ISignUpController } from '@/src/interface-adapters/controllers/auth/sig
 import { ISignOutController } from '@/src/interface-adapters/controllers/auth/sign-out.controller';
 import { IVerifyEmailController } from '@/src/interface-adapters/controllers/auth/verify-email.controller';
 import { IResendVerifyEmailUseCase } from '@/src/application/use-cases/auth/resend-verify-email.use-case';
-import { IResendVerifyEmaiController } from '@/src/interface-adapters/controllers/auth/resend-verify-email.controller';
+import { IResendVerifyEmailController } from '@/src/interface-adapters/controllers/auth/resend-verify-email.controller';
 import { ICommonService } from '@/src/application/services/common.service.interface';
 
 export const DI_SYMBOLS = {
@@ -49,7 +49,7 @@ export const DI_SYMBOLS = {
   ISignUpController: Symbol.for('ISignUpController'),
   ISignOutController: Symbol.for('ISignOutController'),
   IVerifyEmailController: Symbol.for('IVerifyEmailController'),
-  IResendVerifyEmaiController: Symbol.for('IResendVerifyEmaiController'),
+  IResendVerifyEmailController: Symbol.for('IResendVerifyEmailController'),
 };
 
 export interface DI_RETURN_TYPES {
@@ -78,6 +78,6 @@ export interface DI_RETURN_TYPES {
   ISignInController: ISignInController;
   ISignUpController: ISignUpController;
   ISignOutController: ISignOutController;
-  IResendVerifyEmaiController: IResendVerifyEmaiController;
+  IResendVerifyEmailController: IResendVerifyEmailController;
   IVerifyEmailController: IVerifyEmailController;
 }

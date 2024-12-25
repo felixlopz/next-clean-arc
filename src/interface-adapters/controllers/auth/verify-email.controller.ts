@@ -7,8 +7,9 @@ import { UnauthenticatedError } from '@/src/entities/errors/auth';
 import { IAuthenticationService } from '@/src/application/services/authentication.service.interface';
 import { ISetEmailAsVerifiedUseCase } from '@/src/application/use-cases/user/set-email-as-verified.useCase';
 
+// TODO: Validate to have specific patter and add it to the test
 const inputSchema = z.object({
-  code: z.string(),
+  code: z.string().min(8).max(8),
 });
 
 export type IVerifyEmailController = ReturnType<
@@ -35,7 +36,7 @@ export const verifyUserEmailController =
           throw new InputParseError('Invalid data', { cause: inputParseError });
         }
 
-        if (!sessionId) {
+        if (sessionId == null) {
           throw new UnauthenticatedError('Must be logged in to verify email');
         }
 

@@ -66,7 +66,7 @@ export async function resendEmailVerificationCodeAction(): Promise<ActionResult>
         const storedCookie = await cookies();
         const sessionId = storedCookie.get(SESSION_COOKIE)?.value;
         const verifyEmailController = getInjection(
-          'IResendVerifyEmaiController'
+          'IResendVerifyEmailController'
         );
 
         await verifyEmailController(sessionId);
