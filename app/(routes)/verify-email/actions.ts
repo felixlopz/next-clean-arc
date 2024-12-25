@@ -38,7 +38,6 @@ export async function verifyEmailAction(
         }
 
         await verifyEmailController({ code }, sessionId);
-        redirect('/');
       } catch (err) {
         if (
           err instanceof UnauthenticatedError ||
@@ -52,6 +51,8 @@ export async function verifyEmailAction(
         crashReporterService.report(err);
         throw err;
       }
+
+      redirect('/');
     }
   );
 }
