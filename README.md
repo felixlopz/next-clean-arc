@@ -15,6 +15,9 @@ based on this [repo](https://github.com/nikolovlazar/nextjs-clean-architecture)
 - [ ] Admin Dashboard
 - [ ] Email Verification with actual email service
 
+Resources:
+[lucia auth](https://github.com/lucia-auth/example-nextjs-email-password-2fa)
+
 ## Setup
 
 1. Get `DATABASE_URL` of a postgres neon databse at
